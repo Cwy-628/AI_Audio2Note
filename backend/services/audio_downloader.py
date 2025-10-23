@@ -161,12 +161,28 @@ class AudioDownloader:
         # 解析URL
         parsed = urllib.parse.urlparse(url)
         
-        # 对于B站链接，移除spm_id_from和vd_source等参数
+        # 对于B站链接，只移除追踪参数，保留必要的参数
         if 'bilibili.com' in parsed.netloc:
-            # 只保留基本的视频ID参数
             query_params = urllib.parse.parse_qs(parsed.query)
-            # 移除不需要的参数
-            for param in ['spm_id_from', 'vd_source', 'timestamp', 'unique_k', 'spm_id']:
+            # 只移除追踪和统计相关的参数，保留p（分P）、t（时间戳）等重要参数
+            tracking_params = ['spm_id_from', 'vd_source', 'unique_k', 'spm_id', 'from_spmid', 'from']
+            for param in tracking_params:
+                query_params.pop(param, None)
+            
+            # 重新构建URL
+            new_query = urllib.parse.urlencode(query_params, doseq=True)
+            clean_url = urllib.parse.urlunparse((
+                parsed.scheme, parsed.netloc, parsed.path,
+                parsed.params, new_query, parsed.fragment
+            ))
+            return clean_url
+        
+        # 对于YouTube链接，也进行适当的清理
+        elif 'youtube.com' in parsed.netloc or 'youtu.be' in parsed.netloc:
+            query_params = urllib.parse.parse_qs(parsed.query)
+            # 移除追踪参数，保留v（视频ID）等重要参数
+            tracking_params = ['feature', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']
+            for param in tracking_params:
                 query_params.pop(param, None)
             
             # 重新构建URL
@@ -189,13 +205,34 @@ class AudioDownloader:
         Returns:
             bool: 支持返回 True，不支持返回 False
         """
-        supported_domains = [
-            'bilibili.com',
-            'youtube.com',
-            'youtu.be',
-            'm.youtube.com',
-            'www.youtube.com'
+        import re
+        
+        # 更精确的URL模式匹配
+        bilibili_patterns = [
+            r'https?://(?:www\.)?bilibili\.com/video/[A-Za-z0-9]+',
+            r'https?://(?:www\.)?bilibili\.com/bangumi/play/[A-Za-z0-9]+',
+            r'https?://(?:www\.)?bilibili\.com/cheese/play/[A-Za-z0-9]+'
         ]
-
-        url_lower = url.lower()
-        return any(domain in url_lower for domain in supported_domains)
+        
+        youtube_patterns = [
+            r'https?://(?:www\.)?youtube\.com/watch\?v=[A-Za-z0-9_-]+',
+            r'https?://(?:www\.)?youtube\.com/embed/[A-Za-z0-9_-]+',
+            r'https?://(?:www\.)?youtube\.com/v/[A-Za-z0-9_-]+',
+            r'https?://youtu\.be/[A-Za-z0-9_-]+',
+            r'https?://(?:www\.)?youtube\.com/shorts/[A-Za-z0-9_-]+',
+            r'https?://(?:m\.)?youtube\.com/watch\?v=[A-Za-z0-9_-]+'
+        ]
+        
+        url_lower = url.lower().strip()
+        
+        # 检查B站链接
+        for pattern in bilibili_patterns:
+            if re.match(pattern, url_lower):
+                return True
+        
+        # 检查YouTube链接
+        for pattern in youtube_patterns:
+            if re.match(pattern, url_lower):
+                return True
+        
+        return False

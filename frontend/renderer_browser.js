@@ -37,8 +37,10 @@ class AudioDownloaderApp {
 
     async checkBackendHealth() {
         try {
-            const result = await ipcRenderer.invoke('check-backend-health');
-            if (result.status === 'error') {
+            const response = await fetch('http://localhost:8001/health');
+            if (response.ok) {
+                console.log('后端服务正常');
+            } else {
                 this.showStatus('后端服务未启动，请先启动后端服务', 'error');
             }
         } catch (error) {
@@ -116,13 +118,42 @@ class AudioDownloaderApp {
 
     async handleSelectFolder() {
         try {
-            const folderPath = await ipcRenderer.invoke('select-download-folder');
-            if (folderPath) {
-                this.downloadDir = folderPath;
-                this.currentDownloadDir.textContent = folderPath;
-                this.downloadDirInfo.style.display = 'block';
-                this.showStatus(`已选择下载文件夹: ${folderPath}`, 'info');
-            }
+            // 浏览器版本：使用HTML5文件API选择文件夹
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.webkitdirectory = true; // 允许选择文件夹
+            input.style.display = 'none';
+            
+            // 添加到页面
+            document.body.appendChild(input);
+            
+            // 触发文件选择
+            input.click();
+            
+            // 等待用户选择
+            input.addEventListener('change', (event) => {
+                const files = event.target.files;
+                if (files.length > 0) {
+                    // 获取第一个文件的路径，然后提取文件夹路径
+                    const firstFile = files[0];
+                    const folderPath = firstFile.webkitRelativePath.split('/')[0];
+                    
+                    // 由于浏览器安全限制，我们只能获取相对路径
+                    // 这里我们使用一个提示让用户手动输入完整路径
+                    const fullPath = prompt('请输入完整的下载文件夹路径:', folderPath);
+                    
+                    if (fullPath) {
+                        this.downloadDir = fullPath;
+                        this.currentDownloadDir.textContent = fullPath;
+                        this.downloadDirInfo.style.display = 'block';
+                        this.showStatus(`已选择下载文件夹: ${fullPath}`, 'info');
+                    }
+                }
+                
+                // 清理
+                document.body.removeChild(input);
+            });
+            
         } catch (error) {
             this.showStatus(`选择文件夹失败: ${error.message}`, 'error');
         }

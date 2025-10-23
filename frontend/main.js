@@ -22,7 +22,16 @@ function createWindow() {
     },
     // icon: path.join(__dirname, 'assets/icon.png'), // 暂时注释掉，因为图标文件不存在
     title: 'AI Audio2Note',
-    show: false // 先不显示，等加载完成后再显示
+    show: true, // 立即显示窗口
+    center: true, // 居中显示
+    resizable: true,
+    minimizable: true,
+    maximizable: true,
+    closable: true,
+    alwaysOnTop: false, // 不要总是在最前面
+    skipTaskbar: false, // 在任务栏中显示
+    fullscreenable: true,
+    frame: true // 显示窗口框架
   });
 
   console.log('Window created, loading HTML...');
@@ -30,9 +39,13 @@ function createWindow() {
   // 加载应用
   mainWindow.loadFile('index.html').then(() => {
     console.log('HTML loaded successfully');
-    mainWindow.show(); // 加载完成后显示窗口
+    mainWindow.show(); // 确保窗口显示
+    mainWindow.focus(); // 聚焦到窗口
+    console.log('Window should be visible now');
   }).catch((error) => {
     console.error('Failed to load HTML:', error);
+    // 即使加载失败也显示窗口，这样用户可以看到错误
+    mainWindow.show();
   });
 
   // 开发模式下可以选择是否打开开发者工具
@@ -47,9 +60,29 @@ function createWindow() {
     mainWindow = null;
   });
 
+  // 监听窗口显示事件
+  mainWindow.on('show', () => {
+    console.log('Window is now visible');
+  });
+
+  // 监听窗口隐藏事件
+  mainWindow.on('hide', () => {
+    console.log('Window is now hidden');
+  });
+
   // 监听窗口错误
   mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
     console.error('Failed to load:', errorCode, errorDescription);
+  });
+
+  // 监听页面加载完成
+  mainWindow.webContents.on('did-finish-load', () => {
+    console.log('Page finished loading');
+  });
+
+  // 监听页面开始加载
+  mainWindow.webContents.on('did-start-loading', () => {
+    console.log('Page started loading');
   });
 
   console.log('Window setup complete');

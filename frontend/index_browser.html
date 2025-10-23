@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Audio2Note - 浏览器版本</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎵 AI Audio2Note</h1>
+            <p>视频下载与音频提取工具 (浏览器版本)</p>
+        </header>
+
+        <main class="main-content">
+            <div class="input-section">
+                <div class="url-input-group">
+                    <label for="videoUrl">视频链接：</label>
+                    <input 
+                        type="url" 
+                        id="videoUrl" 
+                        placeholder="请输入B站或YouTube视频链接..."
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="page-input-group">
+                    <label for="pageNumber">分P编号（可选）：</label>
+                    <input 
+                        type="number" 
+                        id="pageNumber" 
+                        placeholder="留空下载所有分P"
+                        min="1"
+                    >
+                </div>
+
+                <div class="button-group">
+                    <button id="downloadBtn" class="btn btn-primary">
+                        <span class="btn-text">开始下载</span>
+                        <span class="btn-loading" style="display: none;">下载中...</span>
+                    </button>
+                    <button id="selectFolderBtn" class="btn btn-secondary">
+                        选择下载文件夹
+                    </button>
+                </div>
+                
+                <div id="downloadDirInfo" class="download-dir-info" style="display: none;">
+                    <small>下载目录: <span id="currentDownloadDir">未选择</span></small>
+                </div>
+            </div>
+
+            <div class="status-section">
+                <div id="statusMessage" class="status-message"></div>
+                <div id="progressBar" class="progress-bar" style="display: none;">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>下载结果</h3>
+                <div id="resultContent"></div>
+            </div>
+
+            <div class="history-section">
+                <h3>下载历史</h3>
+                <div id="historyList" class="history-list">
+                    <p class="no-history">暂无下载记录</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>支持平台：B站 (bilibili.com) | YouTube (youtube.com)</p>
+            <p>版本：1.0.0 (浏览器版本)</p>
+        </footer>
+    </div>
+
+    <script src="renderer_browser.js"></script>
+</body>
+</html>
