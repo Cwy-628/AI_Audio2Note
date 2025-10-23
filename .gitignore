@@ -306,3 +306,7 @@ dist/
 # Temporary files
 *.tmp
 *.temp
+
+# Project specific - exclude from version control
+archive/
+docs/
