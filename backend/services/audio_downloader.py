@@ -39,16 +39,17 @@ class AudioDownloader:
         Args:
             session_folder (str, optional): 会话文件夹路径
         """
-        # 创建 temp 目录
-        self.temp_dir = "temp"
-        if not os.path.exists(self.temp_dir):
-            os.makedirs(self.temp_dir)
-
         # 设置输出目录
         if session_folder:
             self.output_dir = session_folder
+            self.temp_dir = session_folder
         else:
+            self.temp_dir = "temp"
             self.output_dir = self.temp_dir
+        
+        # 确保输出目录存在
+        if not os.path.exists(self.output_dir):
+            os.makedirs(self.output_dir)
 
         self.ydl_opts = {
             # 输出目录：保存到指定文件夹

@@ -122,15 +122,23 @@ function setupIpcHandlers() {
   });
 
   ipcMain.handle('select-download-folder', async () => {
-    const result = await dialog.showOpenDialog(mainWindow, {
-      properties: ['openDirectory'],
-      title: '选择下载文件夹'
-    });
-    
-    if (!result.canceled) {
-      return result.filePaths[0];
+    try {
+      const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openDirectory'],
+        title: '选择下载文件夹',
+        buttonLabel: '选择此文件夹',
+        message: '请选择用于保存下载文件的文件夹'
+      });
+      
+      if (!result.canceled && result.filePaths.length > 0) {
+        console.log('用户选择的文件夹:', result.filePaths[0]);
+        return result.filePaths[0];
+      }
+      return null;
+    } catch (error) {
+      console.error('文件夹选择错误:', error);
+      return null;
     }
-    return null;
   });
 
   ipcMain.handle('show-message-box', async (event, { type, title, message }) => {

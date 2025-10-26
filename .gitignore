@@ -21,6 +21,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+dist/
 
 # PyInstaller
 *.manifest
@@ -310,3 +311,6 @@ dist/
 # Project specific - exclude from version control
 archive/
 docs/
+
+# Downloaded content
+downloads/

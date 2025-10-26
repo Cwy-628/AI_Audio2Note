@@ -7,7 +7,9 @@
     "start": "electron .",
     "dev": "electron . --dev",
     "build": "electron-builder",
-    "build-win": "electron-builder --win",
+    "build:win": "electron-builder --win --dir",
+    "build:mac": "electron-builder --mac --dir",
+    "build:linux": "electron-builder --linux --dir",
     "dist": "npm run build",
     "pack": "electron-builder --dir",
     "postinstall": "echo 'Dependencies installed successfully'"
@@ -39,12 +41,17 @@
       "!dist"
     ],
     "win": {
-      "target": "nsis",
+      "target": "dir",
       "icon": "assets/icon.ico"
     },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+    "mac": {
+      "target": "dir",
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "target": "dir",
+      "icon": "assets/icon.png"
     }
   }
 }

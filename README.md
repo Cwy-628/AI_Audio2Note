@@ -1,40 +1,15 @@
 # 🎵 AI Audio2Note
 
-一个现代化的视频下载与音频提取工具，支持B站和YouTube平台，使用FastAPI后端和Electron前端构建。
+一个强大的视频音频提取工具，支持从B站和YouTube下载视频并提取音频。
 
-## ✨ 特性
+## ✨ 功能特点
 
-- 🎬 支持B站和YouTube视频下载
-- 🎵 自动提取音频为MP3格式
-- 🖥️ 现代化的Electron桌面应用界面
-- ⚡ 高性能FastAPI后端服务
-- 📦 支持打包为独立exe文件
-- 🔧 支持分P视频下载
-- 📱 响应式设计，支持多种屏幕尺寸
-
-## 🏗️ 项目结构
-
-```
-AI_audio2note/
-├── backend/                 # FastAPI后端
-│   ├── main.py             # 主应用文件
-│   ├── services/           # 服务层
-│   │   ├── audio_downloader.py
-│   │   └── process_service.py
-│   ├── requirements.txt    # 后端依赖
-│   └── build_exe.py        # 后端打包脚本
-├── frontend/               # Electron前端
-│   ├── main.js            # Electron主进程
-│   ├── index.html         # 主页面
-│   ├── styles.css         # 样式文件
-│   ├── renderer.js        # 渲染进程逻辑
-│   ├── package.json       # 前端依赖
-│   └── assets/            # 资源文件
-├── docs/                  # 文档目录
-├── build.py              # 构建脚本
-├── start_dev.py          # 开发环境启动脚本
-└── requirements.txt      # 项目依赖
-```
+- 🎬 **多平台支持**：支持B站(bilibili.com)和YouTube视频下载
+- 🎵 **音频提取**：自动提取视频中的音频并转换为MP3格式
+- 📁 **原生文件夹选择**：使用系统原生文件夹选择器选择下载路径
+- 🖥️ **跨平台桌面应用**：基于Electron的现代化桌面应用
+- ⚡ **快速下载**：优化的下载引擎，支持大文件下载
+- 📱 **现代化界面**：简洁美观的用户界面
 
 ## 🚀 快速开始
 
@@ -42,184 +17,220 @@ AI_audio2note/
 
 - Python 3.8+
 - Node.js 16+
-- npm 或 yarn
-- FFmpeg (用于音频处理)
+- FFmpeg
 
 ### 安装依赖
 
 1. **安装Python依赖**
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-2. **安装前端依赖**
-   ```bash
-   cd frontend
-   npm install
-   ```
+2. **安装Node.js依赖**
+```bash
+cd frontend
+npm install
+```
 
-### 开发环境运行
+3. **安装FFmpeg**
+```bash
+# macOS (使用Homebrew)
+brew install ffmpeg
 
-1. **智能启动（推荐）**
-   ```bash
-   python start_dev_smart.py
-   ```
-   自动检查依赖，只在必要时安装，避免重复安装。
+# Windows (使用Chocolatey)
+choco install ffmpeg
 
-2. **快速启动**
-   ```bash
-   python start_quick.py
-   ```
-   直接启动服务，不检查依赖（适合依赖已安装的情况）。
+# Linux (Ubuntu/Debian)
+sudo apt update
+sudo apt install ffmpeg
+```
 
-3. **原始启动**
-   ```bash
-   python start_dev.py
-   ```
-   每次都检查并安装依赖。
+### 启动应用
 
-4. **手动启动**
-   
-   启动后端：
-   ```bash
-   cd backend
-   python main.py
-   ```
-   
-   启动前端：
-   ```bash
-   cd frontend
-   npm run dev
-   ```
+```bash
+python start_native.py
+```
 
-### 生产环境打包
+应用将自动启动后端服务和Electron桌面应用。
 
-1. **构建整个应用**
-   ```bash
-   python build.py
-   ```
-
-2. **单独构建后端exe**
-   ```bash
-   cd backend
-   python build_exe.py
-   ```
-
-3. **单独构建前端应用**
-   ```bash
-   cd frontend
-   npm run build-win
-   ```
-
-## 📖 使用说明
+## 📖 使用指南
 
 ### 基本使用
 
-1. 启动应用后，在输入框中粘贴视频链接
-2. 可选择指定分P编号（留空则下载所有分P）
-3. 点击"开始下载"按钮
-4. 等待下载完成，文件将保存到temp目录
+1. **输入视频链接**：在输入框中粘贴B站或YouTube视频链接
+2. **选择下载路径**：点击"选择下载文件夹"按钮，使用系统原生文件夹选择器
+3. **开始下载**：点击"开始下载"按钮开始下载和音频提取
+4. **查看结果**：下载完成后，音频文件将保存在指定文件夹中
 
-### 支持的平台
+### 支持的链接格式
 
-- **B站 (bilibili.com)**: 支持所有公开视频
-- **YouTube (youtube.com)**: 支持所有公开视频
+**B站链接**：
+- `https://www.bilibili.com/video/BV1xxxxx`
+- `https://www.bilibili.com/bangumi/play/xxxxx`
+- 支持带参数的链接（自动清理跟踪参数）
 
-### 功能特性
+**YouTube链接**：
+- `https://www.youtube.com/watch?v=xxxxx`
+- `https://youtu.be/xxxxx`
+- `https://www.youtube.com/shorts/xxxxx`
+- 支持移动端和嵌入链接
 
-- **URL验证**: 自动验证链接格式和平台支持
-- **分P下载**: 支持多P视频的指定分P下载
-- **进度显示**: 实时显示下载进度
-- **历史记录**: 自动保存下载历史，支持快速重新下载
-- **错误处理**: 完善的错误提示和处理机制
+### 高级功能
 
-## 🔧 技术栈
+- **分P下载**：对于B站多P视频，可以指定下载特定分P
+- **下载历史**：自动保存下载历史，方便重复下载
+- **进度显示**：实时显示下载进度
+- **错误处理**：智能错误提示和重试机制
 
-### 后端
-- **FastAPI**: 现代、快速的Web框架
-- **uvicorn**: ASGI服务器
-- **yt-dlp**: 视频下载库
-- **Pydantic**: 数据验证
+## 🏗️ 项目结构
 
-### 前端
-- **Electron**: 跨平台桌面应用框架
-- **HTML5/CSS3**: 现代化界面
-- **JavaScript ES6+**: 现代JavaScript特性
-- **Axios**: HTTP客户端
-
-## 📦 打包说明
-
-### 后端打包
-使用PyInstaller将Python后端打包为exe文件：
-```bash
-cd backend
-python build_exe.py
+```
+AI_Audio2Note/
+├── backend/                 # 后端服务
+│   ├── main.py             # FastAPI主服务
+│   ├── services/           # 核心服务模块
+│   │   ├── audio_downloader.py    # 音频下载器
+│   │   └── process_service.py     # 处理服务
+│   ├── build_exe.py        # Windows打包脚本
+│   └── requirements.txt    # Python依赖
+├── frontend/               # 前端应用
+│   ├── main.js            # Electron主进程
+│   ├── renderer.js        # 渲染进程
+│   ├── index.html         # 主页面
+│   ├── styles.css         # 样式文件
+│   ├── package.json       # Node.js依赖
+│   └── node_modules/      # 依赖包
+├── start_native.py        # 启动脚本
+├── requirements.txt       # 项目依赖
+└── README.md             # 项目说明
 ```
 
-### 前端打包
-使用electron-builder打包Electron应用：
+## 🔧 开发说明
+
+### 后端技术栈
+
+- **FastAPI**：现代化的Python Web框架
+- **yt-dlp**：强大的视频下载工具
+- **FFmpeg**：音视频处理工具
+
+### 前端技术栈
+
+- **Electron**：跨平台桌面应用框架
+- **原生HTML/CSS/JavaScript**：轻量级前端
+- **系统API**：原生文件夹选择器
+
+### 核心功能实现
+
+1. **视频下载**：使用yt-dlp处理各种视频平台
+2. **音频提取**：FFmpeg转换音频格式
+3. **文件管理**：智能文件命名和目录管理
+4. **用户界面**：响应式设计，支持原生系统功能
+
+## 📦 打包发布
+
+### 快速构建分发包
+
+为没有代码基础的用户创建开箱即用的分发包：
+
 ```bash
-cd frontend
-npm run build-win
+# 一键构建所有平台
+python build_all.py
+
+# 或使用快速构建
+python build_quick.py
 ```
 
-### 完整应用打包
-使用构建脚本打包整个应用：
-```bash
-python build.py
+### 构建要求
+
+- **Python 3.8+**
+- **Node.js 16+**
+- **FFmpeg** (用户端需要)
+
+### 分发包结构
+
+构建完成后，会在`dist/`目录生成分发包：
+
+**Windows分发包**：
+```
+AI_Audio2Note_Windows/
+├── ai-audio2note-backend.exe    # 后端服务
+├── AI_Audio2Note/               # Electron应用
+├── 启动AI_Audio2Note.bat        # 启动脚本
+└── 使用说明.txt                 # 用户说明
 ```
 
-## 🛠️ 开发指南
+**macOS分发包**：
+```
+AI_Audio2Note_Mac/
+├── ai-audio2note-backend        # 后端服务
+├── AI_Audio2Note.app/           # Electron应用
+├── 启动AI_Audio2Note.command    # 启动脚本
+└── 使用说明.txt                 # 用户说明
+```
 
-### 添加新的视频平台
+### 用户使用
 
-1. 在`backend/services/audio_downloader.py`中添加新的域名到`supported_domains`列表
-2. 测试新平台的URL验证和下载功能
+用户只需要：
+1. 下载对应的分发包
+2. 安装FFmpeg：`python install_ffmpeg.py`
+3. 运行启动脚本即可使用
 
-### 修改前端界面
+### 跨平台支持
 
-1. 编辑`frontend/index.html`修改页面结构
-2. 编辑`frontend/styles.css`修改样式
-3. 编辑`frontend/renderer.js`修改交互逻辑
+- **Windows**：支持.exe打包和分发包
+- **macOS**：支持.app打包和分发包
+- **Linux**：支持Electron应用
 
-### 添加新的API接口
+### 详细构建指南
 
-1. 在`backend/main.py`中添加新的路由
-2. 在`frontend/renderer.js`中添加对应的API调用
-3. 更新前端界面以支持新功能
+查看 `BUILD_GUIDE.md` 了解完整的构建和分发流程。
 
 ## 🐛 故障排除
 
 ### 常见问题
 
-1. **后端启动失败**
-   - 检查Python版本是否为3.8+
-   - 确认所有依赖已正确安装
-   - 检查端口8000是否被占用
+1. **FFmpeg未找到**
+   - 确保FFmpeg已正确安装并在PATH中
+   - 重启终端或IDE
 
-2. **前端启动失败**
-   - 检查Node.js版本是否为16+
-   - 确认npm依赖已正确安装
-   - 检查后端服务是否正在运行
+2. **YouTube下载失败**
+   - 更新yt-dlp到最新版本：`pip install --upgrade yt-dlp`
+   - 检查网络连接
 
-3. **视频下载失败**
-   - 确认网络连接正常
-   - 检查FFmpeg是否正确安装
-   - 验证视频链接是否有效
+3. **B站链接无法识别**
+   - 确保链接格式正确
+   - 尝试清理链接中的跟踪参数
 
-4. **打包失败**
-   - 确认所有依赖已安装
-   - 检查PyInstaller和electron-builder是否正确安装
-   - 查看错误日志获取详细信息
+4. **文件夹选择器不工作**
+   - 确保在Electron环境中运行
+   - 检查系统权限设置
 
-## 📄 许可证
+### 调试模式
 
-MIT License
+启动时添加调试信息：
+```bash
+DEBUG=1 python start_native.py
+```
 
-## 🤝 贡献
+## 🤝 贡献指南
 
 欢迎提交Issue和Pull Request！
 
-## 📞 支持
+1. Fork项目
+2. 创建功能分支
+3. 提交更改
+4. 发起Pull Request
 
-如有问题，请提交Issue或联系开发团队。
+## 📄 许可证
+
+MIT License - 详见LICENSE文件
+
+## 🙏 致谢
+
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - 强大的视频下载工具
+- [Electron](https://electronjs.org/) - 跨平台桌面应用框架
+- [FastAPI](https://fastapi.tiangolo.com/) - 现代Python Web框架
+
+---
+
+**AI Audio2Note** - 让视频音频提取变得简单高效！ 🎵
